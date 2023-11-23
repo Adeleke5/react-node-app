@@ -21,12 +21,12 @@ jobs:
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: my-image-name
-        format: 'json'
+        format: 'table'
         exit-code: '0'
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
-        output: 'trivy-results.json'
+        output: 'trivy-results.table'
 
     # - name: Upload Trivy scan results to Github Security table
     #   uses: github/codeql-action/upload-sarif@v2
@@ -36,5 +36,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: scan-report
-        path: trivy-results.json
+        path: trivy-results.table
         retention-days: 5
