@@ -21,14 +21,14 @@ jobs:
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: my-image-name
-        format: 'sarif'
+        format: 'html'
         exit-code: '0'
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
-        output: 'trivy-results.sarif'
+        # output: 'trivy-results.sarif'
 
-    - name: Upload Trivy scan results to Github Security table
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: 'trivy-results.sarif'
+    # - name: Upload Trivy scan results to Github Security table
+    #   uses: github/codeql-action/upload-sarif@v2
+    #   with:
+    #     sarif_file: 'trivy-results.sarif'
