@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  build:
+  Scan-and-Report:
 
     runs-on: ubuntu-latest
 
@@ -21,7 +21,7 @@ jobs:
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: my-image-name
-        format: 'html'
+        format: 'table'
         exit-code: '0'
         ignore-unfixed: true
         vuln-type: 'os,library'
