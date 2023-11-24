@@ -31,8 +31,8 @@ jobs:
     - name: TruffleHog OSS
       uses: trufflesecurity/trufflehog@main
       with:
-        path: ./
-        base: ${{ github.event.repository.default_branch }}
+        path: master
+        base: master
         extra_args: --debug --only-verified
 
     # - name: Upload Trivy scan results to Github Security table
