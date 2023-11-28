@@ -35,6 +35,14 @@ jobs:
         base: master
         extra_args: --debug --only-verified
 
+    - name: ZAP Scan
+      uses: zaproxy/action-baseline@v0.10.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        target: 'http://www.adevleke.com'
+        cmd_options: '-a'
+        fail_action: false
+
     # - name: Upload Trivy scan results to Github Security table
     #   uses: github/codeql-action/upload-sarif@v2
     #   with:
