@@ -13,8 +13,10 @@ on:
         type: choice
         description: Choose target environment
         options:
+        - dry-run
         - Blue
         - Green
+        default: dry-run
       tags:
         description: 'tags'
       
