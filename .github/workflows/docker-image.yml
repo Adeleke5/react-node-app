@@ -52,8 +52,9 @@ jobs:
 
   update-loadbalancer:
     runs-on: ubuntu-latest
-    if: |
-      (needs.deploy-production-blue.result == 'success' || needs.deploy-production-green.result == 'success')
+    needs:
+      - deploy-production-green
+      - deploy-production-blue
     steps:
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
