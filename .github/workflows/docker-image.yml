@@ -10,11 +10,14 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Specify Environment'     
-        required: true
-        default: ''
+        type: choice
+        description: Choose target environment
+        options:
+        - Blue
+        - Green
       tags:
         description: 'tags'
+      
 
 jobs:
 
@@ -26,6 +29,10 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name
+
+    - name: greet
+      run: |
+        echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
