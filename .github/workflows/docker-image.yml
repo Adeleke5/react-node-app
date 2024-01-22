@@ -21,7 +21,7 @@ on:
 
 jobs:
 
-  Scan-and-Report:
+  build:
 
     runs-on: ubuntu-latest
 
@@ -30,6 +30,22 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name
 
+  deploy-production-blue:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event.inputs.environment == 'Blue')
+    needs: build
+    steps:
+    - name: greet
+      run: |
+        echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
+        
+  deploy-production-green:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event.inputs.environment == 'Green')
+    needs: build
+    steps:
     - name: greet
       run: |
         echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
