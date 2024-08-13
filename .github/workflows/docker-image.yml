@@ -19,7 +19,10 @@ on:
         default: dry-run
       tags:
         description: 'tags'
-      
+
+defaults:
+  run:
+    shell: pwsh
 
 jobs:
 
