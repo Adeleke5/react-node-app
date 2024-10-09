@@ -28,6 +28,16 @@ jobs:
         severity: 'CRITICAL,HIGH'
         output: 'trivy-results.table'
 
+    - name: Scan critical vulnerability
+      uses: aquasecurity/trivy-action@0.20.0
+      with:
+        image-ref: my-image-name
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL'
+
    # - name: TruffleHog OSS
    #   uses: trufflesecurity/trufflehog@main
    #   with:
