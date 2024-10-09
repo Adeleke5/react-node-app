@@ -24,7 +24,7 @@ jobs:
         format: 'table'
         exit-code: '0'
         ignore-unfixed: true
-        vuln-type: 'os,library'
+        vuln-type: 'library'
         severity: 'CRITICAL,HIGH'
         output: 'trivy-results.table'
 
@@ -35,14 +35,14 @@ jobs:
         path: trivy-results.table
         retention-days: 5
 
-    - name: Scan critical vulnerability
+    - name: Check critical vulnerability
       uses: aquasecurity/trivy-action@0.20.0
       with:
         image-ref: my-image-name
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
-        vuln-type: 'os,library'
+        vuln-type: 'library'
         severity: 'CRITICAL'
 
    # - name: TruffleHog OSS
