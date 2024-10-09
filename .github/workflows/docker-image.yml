@@ -28,6 +28,13 @@ jobs:
         severity: 'CRITICAL,HIGH'
         output: 'trivy-results.table'
 
+    - name: Upload Scan Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: scan-report
+        path: trivy-results.table
+        retention-days: 5
+
     - name: Scan critical vulnerability
       uses: aquasecurity/trivy-action@0.20.0
       with:
