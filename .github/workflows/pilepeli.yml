@@ -34,7 +34,7 @@ jobs:
       run: |
         $uuid = [guid]::NewGuid().ToString()
         "uuid=$uuid" >> $env:GITHUB_OUTPUT
-        $uuid
+        Write-Output $uuid
 
     - name: Storage container name construct
       id: container-name
