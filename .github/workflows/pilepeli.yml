@@ -56,17 +56,11 @@ jobs:
 
         $csomPath = Get-ChildItem -Path ".\csom" -Filter "Microsoft.SharePointOnline.CSOM.*" | Select-Object -First 1
 
-        Copy-Item "csom\Microsoft.SharePointOnline.CSOM\*\lib\net45\*.dll" -Destination "." -Recurse -Force
+        Copy-Item "csom\Microsoft.SharePointOnline.CSOM.*\lib\net45\*.dll" -Destination "." -Recurse -Force
 
     - name: Download CSOM DLLs
       shell: pwsh
       run: |
-        Invoke-WebRequest https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile .\nuget.exe
-        .\nuget.exe install Microsoft.SharePointOnline.CSOM -OutputDirectory .\csom
-
-        $csomPath = Get-ChildItem -Path ".\csom" -Filter "Microsoft.SharePointOnline.CSOM.*" | Select-Object -First 1
-        tree
-        Copy-Item "csom\Microsoft.SharePointOnline.CSOM\*\lib\net45\*.dll" -Destination "." -Recurse -Force
         #Load SharePoint CSOM Assemblies
         #Add-Type -Path "C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.dll"
         #Add-Type -Path "C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.Runtime.dll"
