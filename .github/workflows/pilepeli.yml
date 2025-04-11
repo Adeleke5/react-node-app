@@ -31,7 +31,7 @@ jobs:
     - name: Generate Random UUID
       shell: pwsh
       id: get-uuid
-      run: echo "uuid=$(uuidgen)" >> $GITHUB_OUTPUT
+      run: echo "uuid=$([guid]::NewGuid().ToString())" >> $GITHUB_OUTPUT
 
     - name: Storage container name construct
       id: container-name
