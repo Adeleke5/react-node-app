@@ -47,7 +47,7 @@ jobs:
 
     - name: Create Storage container
       run: |
-        az storage container create --name ${{ steps.container-name.outputs.containerName }} --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --public-access blob
+        az storage container create --name ${{ steps.container-name.outputs.containerName }} --account-name $env:AZURE_STORAGE_ACCOUNT --account-key $env:AZURE_STORAGE_KEY --public-access blob
 
     - name: Download CSOM DLLs
       run: |
@@ -128,8 +128,8 @@ jobs:
         $TargetFolder="C:\Temp"
         
         #Setup Credentials to connect
-        $username=$SHAREPOINT_USERNAME
-        $password=$SHAREPOINT_PASSWORD
+        $username=$env:SHAREPOINT_USERNAME
+        $password=$env:SHAREPOINT_PASSWORD
         $securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
         $Credentials = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($username, $securePassword)
         
@@ -153,27 +153,27 @@ jobs:
 
     - name: Extract tar file
       run: |
-        tar -xf C:\Temp\${PACKAGE_VERSION}\osp-repo-${PACKAGE_VERSION}.tar -C C:\Temp\${PACKAGE_VERSION}\
+        tar -xf C:\Temp\${env:PACKAGE_VERSION}\osp-repo-${env:PACKAGE_VERSION}.tar -C C:\Temp\${env:PACKAGE_VERSION}\
 
     - name: Read content of GPG and json file into variable
       run: |
-        export REPO_GPG=$(< C:\Temp\${PACKAGE_VERSION}\repo.gpg)
-        export REPO_JSON=$(< C:\Temp\${PACKAGE_VERSION}\repo.json)
-        echo "REPO_GPG=$REPO_GPG" >> $GITHUB_ENV
-        echo "REPO_JSON=$REPO_JSON" >> $GITHUB_ENV
+        export REPO_GPG=$(< C:\Temp\${env:PACKAGE_VERSION}\repo.gpg)
+        export REPO_JSON=$(< C:\Temp\${env:PACKAGE_VERSION}\repo.json)
+        echo "REPO_GPG=$REPO_GPG" >> $env:GITHUB_ENV
+        echo "REPO_JSON=$REPO_JSON" >> $env:GITHUB_ENV
 
     - name: Delete GPG and json file
       run: |
         #Delete GPG and json file from tree
-        rm -rf C:\Temp\${PACKAGE_VERSION}\osp-repo\repo.gpg
-        rm -rf C:\Temp\${PACKAGE_VERSION}\osp-repo\repo.json
+        rm -rf C:\Temp\${env:PACKAGE_VERSION}\osp-repo\repo.gpg
+        rm -rf C:\Temp\${env:PACKAGE_VERSION}\osp-repo\repo.json
 
     - name: Upload files to blob container
       run: |
-        az storage blob upload-batch --destination ${{ steps.container-name.outputs.containerName }} --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --source C:\Temp\${PACKAGE_VERSION}\osp-repo\ --output none
+        az storage blob upload-batch --destination ${{ steps.container-name.outputs.containerName }} --account-name $env:AZURE_STORAGE_ACCOUNT --account-key $env:AZURE_STORAGE_KEY --source C:\Temp\${PACKAGE_VERSION}\osp-repo\ --output none
 
         echo "Uploaded files:"
-        for file in $(find ./my-folder -type f); do
-        blob_name=${file#./my-folder/}
-        echo "https://${AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${CONTAINER_NAME}/${blob_name}"
+        for file in $(find C:\Temp\${env:PACKAGE_VERSION}\osp-repo\ -type f); do
+        blob_name=${file#C:\Temp\${env:PACKAGE_VERSION}\osp-repo\}
+        echo "https://testsa123456781.blob.core.windows.net/${{ steps.container-name.outputs.containerName }}/${blob_name}"
         done
