@@ -2,10 +2,10 @@ name: Copy repository to Azure storage account
 on:
   workflow_dispatch:
     inputs:
-        package_version:
-            description: 'Package version'
-            required: true
-            default: '10.0.0.922'
+      package_version:
+        description: 'Package version'
+        required: true
+        default: '10.0.0.922'
 
 jobs:
   upload-repo:
@@ -29,7 +29,7 @@ jobs:
     #    version: latest
 
     - name: Generate Random UUID
-      shell: pwsh
+      shell: powershell
       id: get-uuid
       run: |
         $uuid = [guid]::NewGuid().ToString()
@@ -39,9 +39,9 @@ jobs:
     - name: Storage container name construct
       id: container-name
       run: |
-        $azVersion = "$env:PACKAGE_VERSION" -replace '\.', '-'
+        $packageVersion = "$env:PACKAGE_VERSION" -replace '\.', '-'
         $uuid = "${{ steps.get-uuid.outputs.uuid }}"
-        $containerName = "osp-repo-$azVersion-$uuid"
+        $containerName = "osp-repo-$packageVersion-${{ github.run_number }}-$uuid"
         "containerName=$containerName" >> $env:GITHUB_OUTPUT
         Write-Output $containerName
 
@@ -58,16 +58,12 @@ jobs:
 
         Copy-Item "csom\Microsoft.SharePointOnline.CSOM.*\lib\net45\*.dll" -Destination "." -Recurse -Force
 
-    - name: Download CSOM DLLs
-      shell: pwsh
+    - name: Download package from sharepoint
+      shell: powershell
       run: |
-        #Load SharePoint CSOM Assemblies
-        #Add-Type -Path "C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.dll"
-        #Add-Type -Path "C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.Runtime.dll"
-        ls
-        
-        Add-Type -Path "csom\Microsoft.SharePointOnline.CSOM.*\lib\net45\Microsoft.SharePoint.Client.dll"
-        Add-Type -Path "csom\Microsoft.SharePointOnline.CSOM.*\lib\net45\Microsoft.SharePoint.Client.Runtime.dll"
+        #Load SharePoint CSOM Assemblie 
+        Add-Type -Path ".\Microsoft.SharePoint.Client.dll"
+        Add-Type -Path ".\Microsoft.SharePoint.Client.Runtime.dll"
         
         Function Download-SPOFolder()
         { 
@@ -123,7 +119,7 @@ jobs:
 
         #Set parameter values
         $SiteURL="https://apps.c.com/sites/1VMSEngineering"
-        $FolderRelativeUrl ="Shared Documents/OSP-Repo/${PACKAGE_VERSION}"
+        $FolderRelativeUrl ="Shared Documents/OSP-Repo/${env:PACKAGE_VERSION}"
         $TargetFolder="C:\Temp"
         
         #Setup Credentials to connect
@@ -172,7 +168,5 @@ jobs:
         az storage blob upload-batch --destination ${{ steps.container-name.outputs.containerName }} --account-name $env:AZURE_STORAGE_ACCOUNT --account-key $env:AZURE_STORAGE_KEY --source C:\Temp\${PACKAGE_VERSION}\osp-repo\ --output none
 
         echo "Uploaded files:"
-        for file in $(find C:\Temp\${env:PACKAGE_VERSION}\osp-repo\ -type f); do
-        blob_name=${file#C:\Temp\${env:PACKAGE_VERSION}\osp-repo\}
-        echo "https://testsa123456781.blob.core.windows.net/${{ steps.container-name.outputs.containerName }}/${blob_name}"
-        done
+        
+        echo "https://testsa123456781.blob.core.windows.net/${{ steps.container-name.outputs.containerName }}"
