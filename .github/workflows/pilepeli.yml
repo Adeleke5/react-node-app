@@ -31,7 +31,9 @@ jobs:
     - name: Generate Random UUID
       shell: pwsh
       id: get-uuid
-      run: echo "uuid=$([guid]::NewGuid().ToString())" >> $GITHUB_OUTPUT
+      run: |
+        echo "uuid=$([guid]::NewGuid().ToString())" >> $GITHUB_OUTPUT
+        $uuid
 
     - name: Storage container name construct
       id: container-name
@@ -39,6 +41,7 @@ jobs:
         $azVersion=($PACKAGE_VERSION) -replace "\.","-"
         $containerName="osp-repo-${azVersion}-${{ steps.get-uuid.outputs.uuid }}"
         echo "containerName=$containerName" >> $GITHUB_OUTPUT
+        $containerName
 
     - name: Create Storage container
       run: |
