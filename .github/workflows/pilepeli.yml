@@ -32,7 +32,8 @@ jobs:
       shell: pwsh
       id: get-uuid
       run: |
-        echo "uuid=$([guid]::NewGuid().ToString())" >> $GITHUB_OUTPUT
+        $uuid = [guid]::NewGuid().ToString()
+        "uuid=$uuid" >> $env:GITHUB_OUTPUT
         $uuid
 
     - name: Storage container name construct
