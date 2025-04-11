@@ -39,10 +39,11 @@ jobs:
     - name: Storage container name construct
       id: container-name
       run: |
-        $azVersion=($PACKAGE_VERSION) -replace "\.","-"
-        $containerName="osp-repo-${azVersion}-${{ steps.get-uuid.outputs.uuid }}"
-        echo "containerName=$containerName" >> $GITHUB_OUTPUT
-        $containerName
+        $azVersion = "$env:PACKAGE_VERSION" -replace '\.', '-'
+        $uuid = "${{ steps.get-uuid.outputs.uuid }}"
+        $containerName = "osp-repo-$azVersion-$uuid"
+        "containerName=$containerName" >> $env:GITHUB_OUTPUT
+        Write-Output $containerName
 
     - name: Create Storage container
       run: |
