@@ -36,13 +36,13 @@ jobs:
     - name: Storage container name construct
       id: container-name
       run: |
-        $az-version=($PACKAGE_VERSION) -replace "\.","-"
-        $container_name="osp-repo-${az-version}-${{ steps.get-uuid.outputs.uuid }}"
-        echo "container_name=$container_name" >> $GITHUB_OUTPUT
+        $azVersion=($PACKAGE_VERSION) -replace "\.","-"
+        $containerName="osp-repo-${azVersion}-${{ steps.get-uuid.outputs.uuid }}"
+        echo "containerName=$containerName" >> $GITHUB_OUTPUT
 
     - name: Create Storage container
       run: |
-        az storage container create --name ${{ steps.container-name.outputs.container_name }} --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --public-access blob
+        az storage container create --name ${{ steps.container-name.outputs.containerName }} --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --public-access blob
 
     - name: Download CSOM DLLs
       run: |
@@ -165,7 +165,7 @@ jobs:
 
     - name: Upload files to blob container
       run: |
-        az storage blob upload-batch --destination ${{ steps.container-name.outputs.container_name }} --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --source C:\Temp\${PACKAGE_VERSION}\osp-repo\ --output none
+        az storage blob upload-batch --destination ${{ steps.container-name.outputs.containerName }} --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --source C:\Temp\${PACKAGE_VERSION}\osp-repo\ --output none
 
         echo "Uploaded files:"
         for file in $(find ./my-folder -type f); do
