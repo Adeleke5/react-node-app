@@ -64,9 +64,10 @@ jobs:
         #Load SharePoint CSOM Assemblies
         #Add-Type -Path "C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.dll"
         #Add-Type -Path "C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.Runtime.dll"
+        ls
         
-        Add-Type -Path "$($csomPath.FullName)\lib\net45\Microsoft.SharePoint.Client.dll"
-        Add-Type -Path "$($csomPath.FullName)\lib\net45\Microsoft.SharePoint.Client.Runtime.dll"
+        Add-Type -Path "csom\Microsoft.SharePointOnline.CSOM.*\lib\net45\Microsoft.SharePoint.Client.dll"
+        Add-Type -Path "csom\Microsoft.SharePointOnline.CSOM.*\lib\net45\Microsoft.SharePoint.Client.Runtime.dll"
         
         Function Download-SPOFolder()
         { 
